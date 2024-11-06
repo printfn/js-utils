@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		/* Base Options: */
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "esnext",
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		/* Strictness */
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		/* If transpiling with TypeScript: */
+		"module": "nodenext",
+		"outDir": "dist",
+		"sourceMap": true,
+		"declaration": true,
+
+		/* If your code runs in the DOM: */
+		"lib": ["esnext", "dom", "dom.iterable"],
+	},
+	"include": ["src"]
+}
