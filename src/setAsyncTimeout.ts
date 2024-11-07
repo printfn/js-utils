@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+
 import { Temporal } from "temporal-polyfill";
 
 type AsyncTimeoutResult = Temporal.Duration | { cancel: true } | undefined | null;
@@ -20,7 +22,7 @@ type AsyncTimeoutResult = Temporal.Duration | { cancel: true } | undefined | nul
  * @returns a function that cancels future invocations of `f`
  */
 export function setAsyncInterval(f: () => (Promise<void> | Promise<AsyncTimeoutResult>), delay: Temporal.Duration) {
-	let cancelled = false as boolean;
+	let cancelled = false;
 	let timeoutId: ReturnType<typeof setTimeout> | undefined;
 	const cancel = () => {
 		cancelled = true;
@@ -35,8 +37,11 @@ export function setAsyncInterval(f: () => (Promise<void> | Promise<AsyncTimeoutR
 		while (!cancelled) {
 			try {
 				const result = await f();
+				if (cancelled) {
+					break;
+				}
 				let nextDelay = delayMilliseconds;
-				if (result && 'cancel' in result && result.cancel as boolean) {
+				if (result && 'cancel' in result && result.cancel) {
 					break;
 				} else if (result && result instanceof Temporal.Duration) {
 					nextDelay = result.total({
