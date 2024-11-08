@@ -2,8 +2,6 @@
 
 import { Temporal } from "temporal-polyfill";
 
-type AsyncTimeoutResult = Temporal.Duration | { cancel: true } | undefined | null;
-
 /**
  * setAsyncInterval repeatedly runs an asynchronous function, similar to
  * `setInterval`.
@@ -21,7 +19,10 @@ type AsyncTimeoutResult = Temporal.Duration | { cancel: true } | undefined | nul
  * @param delay the delay between successive invocations of `f`
  * @returns a function that cancels future invocations of `f`
  */
-export function setAsyncInterval(f: () => (Promise<void> | Promise<AsyncTimeoutResult>), delay: Temporal.Duration) {
+export function setAsyncInterval(
+	f: () => (Promise<void> | Promise<Temporal.Duration | { cancel: true } | undefined | null>),
+	delay: Temporal.Duration,
+) {
 	let cancelled = false;
 	let timeoutId: ReturnType<typeof setTimeout> | undefined;
 	const cancel = () => {
